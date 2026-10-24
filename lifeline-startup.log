@@ -1,0 +1,223 @@
+Starting LifeLine Emergency Assistance; address=agent1qg9a8076ldwvjy58dqkr6kvle0sz5wndrhx3439rew832lxgklq6kc207d4
+INFO:     [LifeLine Emergency Assistance]: Starting agent with address: agent1qg9a8076ldwvjy58dqkr6kvle0sz5wndrhx3439rew832lxgklq6kc207d4
+INFO:     [LifeLine Emergency Assistance]: Agent inspector available at https://agentverse.ai/inspect/?uri=http%3A//127.0.0.1%3A8000&address=agent1qg9a8076ldwvjy58dqkr6kvle0sz5wndrhx3439rew832lxgklq6kc207d4
+INFO:     [LifeLine Emergency Assistance]: Starting server on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     [LifeLine Emergency Assistance]: Starting mailbox client for https://agentverse.ai
+ERROR:    [Errno 48] error while attempting to bind on address ('0.0.0.0', 8000): [errno 48] address already in use
+ERROR:    [LifeLine Emergency Assistance]: Got exception while checking mailbox: Event loop is closed
+Traceback (most recent call last):
+  File "/Users/shivampandey/Documents/lifeline/.venv/lib/python3.13/site-packages/uagents/mailbox.py", line 224, in _check_mailbox_loop
+    async with session.get(
+               ~~~~~~~~~~~^
+        f"{agents_url}/{self._identity.address}/mailbox",
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+        },
+        ^^
+    ) as resp:
+    ^
+GeneratorExit
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/shivampandey/Documents/lifeline/.venv/lib/python3.13/site-packages/uagents/mailbox.py", line 222, in _check_mailbox_loop
+    async with aiohttp.ClientSession() as session:
+               ~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/shivampandey/Documents/lifeline/.venv/lib/python3.13/site-packages/aiohttp/client.py", line 1727, in __aexit__
+    await self.close()
+  File "/Users/shivampandey/Documents/lifeline/.venv/lib/python3.13/site-packages/aiohttp/client.py", line 1593, in close
+    await self._connector.close()
+  File "/Users/shivampandey/Documents/lifeline/.venv/lib/python3.13/site-packages/aiohttp/connector.py", line 1083, in close
+    await super().close(abort_ssl=abort_ssl or self._ssl_shutdown_timeout == 0)
+          ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/shivampandey/Documents/lifeline/.venv/lib/python3.13/site-packages/aiohttp/connector.py", line 497, in close
+    if not (waiters := self._close(abort_ssl=abort_ssl)):
+                       ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/shivampandey/Documents/lifeline/.venv/lib/python3.13/site-packages/aiohttp/connector.py", line 1067, in _close
+    t.cancel()
+    ~~~~~~~~^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/asyncio/base_events.py", line 833, in call_soon
+    self._check_closed()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/asyncio/base_events.py", line 556, in _check_closed
+    raise RuntimeError('Event loop is closed')
+RuntimeError: Event loop is closed
+Exception ignored in: <coroutine object MailboxClient._check_mailbox_loop at 0x114814180>
+Traceback (most recent call last):
+  File "/Users/shivampandey/Documents/lifeline/.venv/lib/python3.13/site-packages/uagents/mailbox.py", line 252, in _check_mailbox_loop
+    await asyncio.sleep(self._poll_interval)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/asyncio/tasks.py", line 712, in sleep
+    loop = events.get_running_loop()
+RuntimeError: no running event loop
+ERROR:asyncio:Task was destroyed but it is pending!
+task: <Task pending name='Task-13' coro=<MailboxClient._check_mailbox_loop() done, defined at /Users/shivampandey/Documents/lifeline/.venv/lib/python3.13/site-packages/uagents/mailbox.py:218> wait_for=<Future pending cb=[shield.<locals>._outer_done_callback() at /Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/asyncio/tasks.py:975, Task.task_wakeup()]>>
+ERROR:asyncio:Task was destroyed but it is pending!
+task: <Task cancelling name='Task-14' coro=<TCPConnector._resolve_host_with_throttle() done, defined at /Users/shivampandey/Documents/lifeline/.venv/lib/python3.13/site-packages/aiohttp/connector.py:1212> wait_for=<Future cancelled> cb=[set.discard(), shield.<locals>._inner_done_callback() at /Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/asyncio/tasks.py:958]>
+Exception ignored in: <coroutine object TCPConnector._wrap_create_connection at 0x11476cf40>
+Traceback (most recent call last):
+  File "/Users/shivampandey/Documents/lifeline/.venv/lib/python3.13/site-packages/aiohttp/connector.py", line 1322, in _wrap_create_connection
+    sock = await aiohappyeyeballs.start_connection(
+  File "/Users/shivampandey/Documents/lifeline/.venv/lib/python3.13/site-packages/aiohappyeyeballs/impl.py", line 89, in start_connection
+    sock, _, _ = await _staggered.staggered_race(
+  File "/Users/shivampandey/Documents/lifeline/.venv/lib/python3.13/site-packages/aiohappyeyeballs/_staggered.py", line 193, in staggered_race
+    task.cancel()
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/asyncio/base_events.py", line 833, in call_soon
+    self._check_closed()
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/asyncio/base_events.py", line 556, in _check_closed
+    raise RuntimeError('Event loop is closed')
+RuntimeError: Event loop is closed
+ERROR:asyncio:Task was destroyed but it is pending!
+task: <Task cancelling name='Task-17' coro=<staggered_race.<locals>.run_one_coro() running at /Users/shivampandey/Documents/lifeline/.venv/lib/python3.13/site-packages/aiohappyeyeballs/_staggered.py:122> wait_for=<Future cancelled>>
+Exception ignored in: <coroutine object TCPConnector._wrap_create_connection at 0x114814680>
+Traceback (most recent call last):
+  File "/Users/shivampandey/Documents/lifeline/.venv/lib/python3.13/site-packages/aiohttp/connector.py", line 1322, in _wrap_create_connection
+    sock = await aiohappyeyeballs.start_connection(
+  File "/Users/shivampandey/Documents/lifeline/.venv/lib/python3.13/site-packages/aiohappyeyeballs/impl.py", line 89, in start_connection
+    sock, _, _ = await _staggered.staggered_race(
+  File "/Users/shivampandey/Documents/lifeline/.venv/lib/python3.13/site-packages/aiohappyeyeballs/_staggered.py", line 193, in staggered_race
+    task.cancel()
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/asyncio/base_events.py", line 833, in call_soon
+    self._check_closed()
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/asyncio/base_events.py", line 556, in _check_closed
+    raise RuntimeError('Event loop is closed')
+RuntimeError: Event loop is closed
+ERROR:asyncio:Task was destroyed but it is pending!
+task: <Task cancelling name='Task-18' coro=<staggered_race.<locals>.run_one_coro() running at /Users/shivampandey/Documents/lifeline/.venv/lib/python3.13/site-packages/aiohappyeyeballs/_staggered.py:122> wait_for=<Future cancelled>>
+INFO:     [LifeLine Emergency Assistance]: Shutting down agent...
+ERROR:    [LifeLine Emergency Assistance]: Error during shutdown: no running event loop
+Traceback (most recent call last):
+  File "/Users/shivampandey/Documents/lifeline/.venv/lib/python3.13/site-packages/uagents/agent.py", line 1302, in run_async
+    await asyncio.gather(*tasks, return_exceptions=True)
+GeneratorExit
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/shivampandey/Documents/lifeline/.venv/lib/python3.13/site-packages/uagents/agent.py", line 1308, in run_async
+    await asyncio.wait_for(
+        self._shutdown(tasks), timeout=self._shutdown_timeout
+    )
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/asyncio/tasks.py", line 506, in wait_for
+    async with timeouts.timeout(timeout):
+               ~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/asyncio/timeouts.py", line 161, in timeout
+    loop = events.get_running_loop()
+RuntimeError: no running event loop
+/Users/shivampandey/Documents/lifeline/.venv/lib/python3.13/site-packages/uagents/agent.py:1316: RuntimeWarning: coroutine 'Agent._shutdown' was never awaited
+  self._logger.exception(f"Error during shutdown: {ex}")
+RuntimeWarning: Enable tracemalloc to get the object allocation traceback
+Exception ignored in: <coroutine object Agent.run_async at 0x11476c2c0>
+Traceback (most recent call last):
+  File "/Users/shivampandey/Documents/lifeline/.venv/lib/python3.13/site-packages/uagents/agent.py", line 1326, in run_async
+    task.cancel()
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/asyncio/base_events.py", line 833, in call_soon
+    self._check_closed()
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/asyncio/base_events.py", line 556, in _check_closed
+    raise RuntimeError('Event loop is closed')
+RuntimeError: Event loop is closed
+ERROR:asyncio:Task was destroyed but it is pending!
+task: <Task pending name='Task-1' coro=<Agent.publish_manifest() running at /Users/shivampandey/Documents/lifeline/.venv/lib/python3.13/site-packages/uagents/agent.py:1079> wait_for=<Future pending cb=[Task.task_wakeup()]>>
+Exception ignored in: <coroutine object Agent.publish_manifest at 0x1146bdcf0>
+RuntimeError: coroutine ignored GeneratorExit
+ERROR:asyncio:Task exception was never retrieved
+future: <Task finished name='Task-8' coro=<Agent.start_server() done, defined at /Users/shivampandey/Documents/lifeline/.venv/lib/python3.13/site-packages/uagents/agent.py:1275> exception=SystemExit(3)>
+Traceback (most recent call last):
+  File "/Users/shivampandey/Documents/lifeline/.venv/lib/python3.13/site-packages/uvicorn/server.py", line 182, in startup
+    server = await loop.create_server(
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<5 lines>...
+    )
+    ^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/asyncio/base_events.py", line 1630, in create_server
+    raise OSError(err.errno, msg) from None
+OSError: [Errno 48] error while attempting to bind on address ('0.0.0.0', 8000): [errno 48] address already in use
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/shivampandey/Documents/lifeline/lifeline_agent.py", line 85, in <module>
+    agent.run()
+    ~~~~~~~~~^^
+  File "/Users/shivampandey/Documents/lifeline/.venv/lib/python3.13/site-packages/uagents/agent.py", line 1340, in run
+    self._loop.run_until_complete(self.run_async())
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/asyncio/base_events.py", line 712, in run_until_complete
+    self.run_forever()
+    ~~~~~~~~~~~~~~~~^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/asyncio/base_events.py", line 683, in run_forever
+    self._run_once()
+    ~~~~~~~~~~~~~~^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/asyncio/base_events.py", line 2050, in _run_once
+    handle._run()
+    ~~~~~~~~~~~^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/asyncio/events.py", line 89, in _run
+    self._context.run(self._callback, *self._args)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/shivampandey/Documents/lifeline/.venv/lib/python3.13/site-packages/uagents/agent.py", line 1284, in start_server
+    await self._server.serve()
+  File "/Users/shivampandey/Documents/lifeline/.venv/lib/python3.13/site-packages/uagents/asgi.py", line 198, in serve
+    await self._server.serve()
+  File "/Users/shivampandey/Documents/lifeline/.venv/lib/python3.13/site-packages/uvicorn/server.py", line 90, in serve
+    await self._serve(sockets)
+  File "/Users/shivampandey/Documents/lifeline/.venv/lib/python3.13/site-packages/uvicorn/server.py", line 105, in _serve
+    await self.startup(sockets=sockets)
+  File "/Users/shivampandey/Documents/lifeline/.venv/lib/python3.13/site-packages/uvicorn/server.py", line 192, in startup
+    sys.exit(STARTUP_FAILURE)
+    ~~~~~~~~^^^^^^^^^^^^^^^^^
+SystemExit: 3
+ERROR:asyncio:Task was destroyed but it is pending!
+task: <Task pending name='Task-7' coro=<Agent.run_startup_tasks() running at /Users/shivampandey/Documents/lifeline/.venv/lib/python3.13/site-packages/uagents/agent.py:1249> wait_for=<Future pending cb=[Task.task_wakeup()]> cb=[Agent.setup.<locals>.<lambda>() at /Users/shivampandey/Documents/lifeline/.venv/lib/python3.13/site-packages/uagents/agent.py:1228]>
+ERROR:asyncio:Task was destroyed but it is pending!
+task: <Task pending name='Task-4' coro=<Agent._schedule_registration() running at /Users/shivampandey/Documents/lifeline/.venv/lib/python3.13/site-packages/uagents/agent.py:860> wait_for=<Future pending cb=[Task.task_wakeup()]>>
+ERROR:asyncio:Task was destroyed but it is pending!
+task: <Task cancelling name='Task-5' coro=<Dispenser.run() running at /Users/shivampandey/Documents/lifeline/.venv/lib/python3.13/site-packages/uagents/communication.py:85> wait_for=<Future cancelled>>
+ERROR:asyncio:Task was destroyed but it is pending!
+task: <Task pending name='Task-6' coro=<Agent._process_message_queue() running at /Users/shivampandey/Documents/lifeline/.venv/lib/python3.13/site-packages/uagents/agent.py:1502> wait_for=<Future pending cb=[Task.task_wakeup()]>>
+ERROR:asyncio:Task was destroyed but it is pending!
+task: <Task cancelling name='Task-16' coro=<staggered_race.<locals>.run_one_coro() running at /Users/shivampandey/Documents/lifeline/.venv/lib/python3.13/site-packages/aiohappyeyeballs/_staggered.py:122> wait_for=<Future cancelled>>
+--- Logging error ---
+Traceback (most recent call last):
+  File "/Users/shivampandey/Documents/lifeline/.venv/lib/python3.13/site-packages/uagents/registration.py", line 150, in register
+RuntimeError: coroutine ignored GeneratorExit
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/logging/__init__.py", line 1151, in emit
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/logging/__init__.py", line 999, in format
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/logging/__init__.py", line 715, in format
+  File "/Users/shivampandey/Documents/lifeline/.venv/lib/python3.13/site-packages/uvicorn/logging.py", line 56, in formatMessage
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/copy.py", line 88, in copy
+ImportError: sys.meta_path is None, Python is likely shutting down
+Call stack:
+  File "/Users/shivampandey/Documents/lifeline/.venv/lib/python3.13/site-packages/uagents/registration.py", line 163, in register
+Message: 'Registration on Almanac API failed: coroutine ignored GeneratorExit'
+Arguments: ()
+--- Logging error ---
+Traceback (most recent call last):
+  File "/Users/shivampandey/Documents/lifeline/.venv/lib/python3.13/site-packages/uagents/agent.py", line 860, in _schedule_registration
+    await self.register()
+GeneratorExit
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/logging/__init__.py", line 1151, in emit
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/logging/__init__.py", line 999, in format
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/logging/__init__.py", line 715, in format
+  File "/Users/shivampandey/Documents/lifeline/.venv/lib/python3.13/site-packages/uvicorn/logging.py", line 56, in formatMessage
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/copy.py", line 88, in copy
+ImportError: sys.meta_path is None, Python is likely shutting down
+Call stack:
+  File "/Users/shivampandey/Documents/lifeline/.venv/lib/python3.13/site-packages/uagents/agent.py", line 877, in _schedule_registration
+    self._logger.info("Stopping registration loop.")
+Message: 'Stopping registration loop.'
+Arguments: ()
+Exception ignored in: <coroutine object Agent._process_message_queue at 0x1146bdf10>
+Traceback (most recent call last):
+  File "/Users/shivampandey/Documents/lifeline/.venv/lib/python3.13/site-packages/uagents/agent.py", line 1502, in _process_message_queue
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/asyncio/queues.py", line 188, in get
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/asyncio/base_events.py", line 833, in call_soon
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/asyncio/base_events.py", line 556, in _check_closed
+RuntimeError: Event loop is closed

@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f7fa">
+  <title>LifeLine — Emergency assistance</title>
+  <style>
+    :root { color-scheme: light; --ink:#172538; --muted:#64748b; --line:#e1e7ef; --blue:#1769aa; --blue-deep:#105587; --wash:#f5f7fa; --card:#fff; --warning:#8a4b0c; }
+    * { box-sizing:border-box; }
+    body { margin:0; min-height:100vh; background:var(--wash); color:var(--ink); font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+    .shell { width:min(920px,100%); min-height:100vh; margin:auto; padding:24px 20px; display:flex; flex-direction:column; }
+    header { display:flex; align-items:center; gap:14px; padding:4px 0 20px; border-bottom:1px solid var(--line); }
+    .mark { width:42px; height:42px; display:grid; place-items:center; border-radius:13px; color:#fff; background:var(--blue); font-weight:800; font-size:22px; }
+    h1 { margin:0; font-size:20px; letter-spacing:-.02em; }
+    .subtitle { margin:2px 0 0; color:var(--muted); font-size:13px; }
+    .new-chat { margin-left:auto; border:1px solid var(--line); background:white; color:var(--ink); border-radius:10px; padding:9px 12px; cursor:pointer; }
+    .notice { margin:16px 0 6px; padding:10px 13px; border-radius:10px; background:#fff7e8; color:var(--warning); font-size:13px; }
+    #messages { flex:1; display:flex; flex-direction:column; gap:16px; padding:22px 0; }
+    .message { max-width:min(78%,680px); display:flex; flex-direction:column; gap:5px; }
+    .message.user { align-self:flex-end; align-items:flex-end; }
+    .message.assistant { align-self:flex-start; align-items:flex-start; }
+    .bubble { padding:12px 15px; border-radius:16px; white-space:pre-wrap; overflow-wrap:anywhere; }
+    .user .bubble { background:var(--blue); color:#fff; border-bottom-right-radius:5px; }
+    .assistant .bubble { background:var(--card); border:1px solid var(--line); border-bottom-left-radius:5px; }
+    .badge { color:var(--muted); font-size:11px; padding:0 5px; }
+    .badge.simulated { color:#8a4b0c; }
+    .welcome { margin:auto; max-width:620px; text-align:center; padding:35px 10px; }
+    .welcome h2 { margin:0 0 8px; font-size:25px; letter-spacing:-.03em; }
+    .welcome p { color:var(--muted); margin:0 auto 22px; }
+    .suggestions { display:flex; gap:9px; justify-content:center; flex-wrap:wrap; }
+    .suggestion { border:1px solid var(--line); background:white; color:var(--ink); border-radius:999px; padding:9px 13px; cursor:pointer; font:inherit; font-size:13px; }
+    .composer { position:sticky; bottom:0; padding:14px 0 4px; background:linear-gradient(transparent,var(--wash) 14%); }
+    form { display:flex; align-items:flex-end; gap:10px; background:white; border:1px solid #cfd8e4; border-radius:16px; padding:8px; box-shadow:0 8px 30px #233a5610; }
+    textarea { flex:1; resize:none; max-height:140px; min-height:42px; border:0; outline:0; padding:10px 8px; color:var(--ink); font:inherit; background:transparent; }
+    textarea::placeholder { color:#8190a3; }
+    #send { border:0; border-radius:11px; color:#fff; background:var(--blue); font-weight:700; padding:10px 17px; min-height:42px; cursor:pointer; }
+    #send:hover { background:var(--blue-deep); }
+    #send:disabled { opacity:.55; cursor:wait; }
+    .footnote { margin:9px 5px 0; text-align:center; color:var(--muted); font-size:11px; }
+    .typing { color:var(--muted); padding:8px 13px; font-size:13px; }
+    @media (max-width:600px) { .shell{padding:15px 13px;}.message{max-width:92%;}.welcome h2{font-size:22px;} .new-chat{font-size:12px;padding:8px;} }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header>
+      <div class="mark" aria-hidden="true">+</div>
+      <div><h1>LifeLine</h1><p class="subtitle">Emergency assistance, one conversation at a time</p></div>
+      <button id="new-chat" class="new-chat" type="button">New chat</button>
+    </header>
+    <div class="notice"><strong>Demo mode:</strong> mechanic and blood-centre directory entries are simulated. Blood stock, distances, prices, and arrival times are not verified.</div>
+    <section id="messages" aria-live="polite" aria-label="Conversation"></section>
+    <section id="welcome" class="welcome">
+      <h2>How can I help?</h2>
+      <p>Describe what you need in your own words. I’ll ask for the details required to search or create a request.</p>
+      <div class="suggestions">
+        <button class="suggestion" data-prompt="My bike has a flat tyre. I need roadside assistance.">Flat tyre help</button>
+        <button class="suggestion" data-prompt="My car broke down near the Yamuna Expressway. Find a mechanic.">Find a mechanic</button>
+        <button class="suggestion" data-prompt="I need two units of O-negative blood near Greater Noida.">Blood-centre contacts</button>
+        <button class="suggestion" data-prompt="What information do you need to arrange roadside assistance?">What details do you need?</button>
+      </div>
+    </section>
+    <div class="composer">
+      <form id="chat-form">
+        <textarea id="message-input" rows="1" maxlength="4000" placeholder="Type your message…" aria-label="Your message"></textarea>
+        <button id="send" type="submit">Send</button>
+      </form>
+      <p class="footnote">For immediate danger or a medical emergency, contact local emergency services or a hospital directly.</p>
+    </div>
+  </main>
+  <script>
+    (() => {
+      const KEY = "lifeline.local.chat.v1";
+      const messagesEl = document.getElementById("messages");
+      const welcomeEl = document.getElementById("welcome");
+      const form = document.getElementById("chat-form");
+      const input = document.getElementById("message-input");
+      const sendButton = document.getElementById("send");
+      let state = loadState();
+
+      function newId() {
+        return crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+      }
+      function loadState() {
+        try {
+          const saved = JSON.parse(localStorage.getItem(KEY) || "null");
+          if (saved && typeof saved.conversationId === "string" && Array.isArray(saved.messages)) return saved;
+        } catch (_) { /* start a fresh local conversation */ }
+        return { conversationId: newId(), messages: [] };
+      }
+      function persist() { localStorage.setItem(KEY, JSON.stringify(state)); }
+      function addMessage(role, text, meta = {}) {
+        state.messages.push({ role, text, ...meta });
+        drawMessage(state.messages[state.messages.length - 1]);
+        persist();
+        welcomeEl.hidden = true;
+      }
+      function drawMessage(item) {
+        const wrapper = document.createElement("article");
+        wrapper.className = `message ${item.role}`;
+        const bubble = document.createElement("div");
+        bubble.className = "bubble";
+        bubble.textContent = item.text;
+        wrapper.appendChild(bubble);
+        if (item.role === "assistant" && item.simulated) {
+          const badge = document.createElement("span");
+          badge.className = "badge simulated";
+          badge.textContent = "SIMULATED DIRECTORY / INTERACTION";
+          wrapper.appendChild(badge);
+        } else if (item.role === "assistant" && item.intent) {
+          const badge = document.createElement("span");
+          badge.className = "badge";
+          badge.textContent = item.intent.replaceAll("_", " ");
+          wrapper.appendChild(badge);
+        }
+        messagesEl.appendChild(wrapper);
+        messagesEl.scrollTop = messagesEl.scrollHeight;
+        window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+      }
+      function renderHistory() {
+        messagesEl.replaceChildren();
+        state.messages.forEach(drawMessage);
+        welcomeEl.hidden = state.messages.length > 0;
+      }
+      async function send(text) {
+        const content = text.trim();
+        if (!content || sendButton.disabled) return;
+        addMessage("user", content);
+        input.value = "";
+        resizeInput();
+        sendButton.disabled = true;
+        sendButton.textContent = "…";
+        const typing = document.createElement("div");
+        typing.className = "typing";
+        typing.textContent = "LifeLine is thinking…";
+        messagesEl.appendChild(typing);
+        try {
+          const response = await fetch("/api/chat", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ conversation_id: state.conversationId, message: content })
+          });
+          const payload = await response.json();
+          if (!response.ok) throw new Error(payload.detail || "The message could not be processed.");
+          addMessage("assistant", payload.reply, { intent: payload.intent, simulated: payload.simulated });
+        } catch (error) {
+          addMessage("assistant", `I couldn't reach the local LifeLine service. ${error.message || "Check that the server is running, then try again."}`, { intent: "connection error" });
+        } finally {
+          typing.remove();
+          sendButton.disabled = false;
+          sendButton.textContent = "Send";
+          input.focus();
+        }
+      }
+      function resizeInput() { input.style.height = "auto"; input.style.height = `${Math.min(input.scrollHeight, 140)}px`; }
+
+      form.addEventListener("submit", event => { event.preventDefault(); send(input.value); });
+      input.addEventListener("input", resizeInput);
+      input.addEventListener("keydown", event => {
+        if (event.key === "Enter" && !event.shiftKey) { event.preventDefault(); form.requestSubmit(); }
+      });
+      document.querySelectorAll(".suggestion").forEach(button => button.addEventListener("click", () => send(button.dataset.prompt)));
+      document.getElementById("new-chat").addEventListener("click", () => {
+        state = { conversationId: newId(), messages: [] };
+        persist(); renderHistory(); input.focus();
+      });
+      renderHistory();
+    })();
+  </script>
+</body>
+</html>
